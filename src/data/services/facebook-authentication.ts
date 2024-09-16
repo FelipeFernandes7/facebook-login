@@ -8,7 +8,7 @@ import { LoadFacebookUserApi } from "@/data/contracts/apis/facebook";
 import { AuthenticationError } from "@/domain/errors/authentication";
 import { TokenGenerator } from "../contracts/crypto";
 
-export class FacebookAuthenticationService {
+export class FacebookAuthenticationService implements FacebookAuthentication {
   constructor(
     private readonly crypto: TokenGenerator,
     private readonly facebookApi: LoadFacebookUserApi,
