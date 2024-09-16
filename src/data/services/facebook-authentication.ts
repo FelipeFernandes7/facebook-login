@@ -2,10 +2,10 @@ import {
   SaveFacebookAccountRepository,
   LoadUserAccountRepository,
 } from "@/data/contracts/repos";
+import { AccessToken, FacebookAccount } from "@/domain/models";
 import { FacebookAuthentication } from "@/domain/features";
 import { LoadFacebookUserApi } from "@/data/contracts/apis/facebook";
 import { AuthenticationError } from "@/domain/errors/authentication";
-import { AccessToken, FacebookAccount } from "@/domain/models";
 import { TokenGenerator } from "../contracts/crypto";
 
 export class FacebookAuthenticationService {
@@ -16,7 +16,7 @@ export class FacebookAuthenticationService {
       SaveFacebookAccountRepository
   ) {}
 
-  async perform(
+  async execute(
     params: FacebookAuthentication.Params
   ): Promise<FacebookAuthentication.Result> {
     const data = await this.facebookApi.loadUser(params);

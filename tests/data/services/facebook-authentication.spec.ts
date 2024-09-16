@@ -43,7 +43,7 @@ describe("FacebookAuthenticationService", () => {
   });
 
   it("should call LoadFacebookUserApi with correct params", async () => {
-    await sut.perform({ token });
+    await sut.execute({ token });
 
     expect(facebookApi.loadUser).toHaveBeenCalledWith({ token });
     expect(facebookApi.loadUser).toHaveBeenCalledTimes(1);
@@ -52,7 +52,7 @@ describe("FacebookAuthenticationService", () => {
   it("should return Authentication Error when LoadFacebookUserApi return undefined", async () => {
     facebookApi.loadUser.mockResolvedValueOnce(undefined);
 
-    const authResult = await sut.perform({ token });
+    const authResult = await sut.execute({ token });
 
     expect(authResult).toEqual(new AuthenticationError());
   });
@@ -64,7 +64,7 @@ describe("FacebookAuthenticationService", () => {
       facebookId: "any_facebook_id",
     });
 
-    await sut.perform({ token });
+    await sut.execute({ token });
     expect(userAccountRepo.load).toHaveBeenCalledWith({
       email: "any_facebook_email",
     });
@@ -72,13 +72,13 @@ describe("FacebookAuthenticationService", () => {
   });
 
   it("should call SaveFacebookAccountRepository with FacebookAccount", async () => {
-    await sut.perform({ token });
+    await sut.execute({ token });
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({});
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1);
   });
 
   it("should call TokenGenerator with correct params", async () => {
-    await sut.perform({ token });
+    await sut.execute({ token });
     expect(crypto.generateToken).toHaveBeenCalledWith({
       key: "any_account_id",
       expirationInMs: AccessToken.expirationInMs,
@@ -87,7 +87,7 @@ describe("FacebookAuthenticationService", () => {
   });
 
   it("should return an AccessToken on success", async () => {
-    const result = await sut.perform({ token });
+    const result = await sut.execute({ token });
 
     expect(result).toEqual(new AccessToken("any_generated_token"));
   });
