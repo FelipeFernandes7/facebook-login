@@ -5,7 +5,7 @@ import {
 import { FacebookAuthentication } from "@/domain/features";
 import { LoadFacebookUserApi } from "@/data/contracts/apis/facebook";
 import { AuthenticationError } from "@/domain/errors/authentication";
-import { FacebookAccount } from "@/domain/models";
+import { AccessToken, FacebookAccount } from "@/domain/models";
 import { TokenGenerator } from "../contracts/crypto";
 
 export class FacebookAuthenticationService {
@@ -29,7 +29,10 @@ export class FacebookAuthenticationService {
       const { id } = await this.userAccountRepo.saveWithFacebook(
         facebookAccount
       );
-      await this.crypto.generateToken({ key: id });
+      await this.crypto.generateToken({
+        key: id,
+        expirationInMs: AccessToken.expirationInMs,
+      });
     }
     return new AuthenticationError();
   }
