@@ -18,7 +18,7 @@ export class FacebookAuthenticationService {
 
   async perform(
     params: FacebookAuthentication.Params
-  ): Promise<AuthenticationError> {
+  ): Promise<FacebookAuthentication.Result> {
     const data = await this.facebookApi.loadUser(params);
     if (data !== undefined) {
       const accountData = await this.userAccountRepo.load({
@@ -29,10 +29,11 @@ export class FacebookAuthenticationService {
       const { id } = await this.userAccountRepo.saveWithFacebook(
         facebookAccount
       );
-      await this.crypto.generateToken({
+      const token = await this.crypto.generateToken({
         key: id,
         expirationInMs: AccessToken.expirationInMs,
       });
+      return new AccessToken(token);
     }
     return new AuthenticationError();
   }
