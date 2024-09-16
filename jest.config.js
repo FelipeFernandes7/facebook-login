@@ -11,6 +11,7 @@ const config = {
   transform: {
     "\\.ts": "ts-jest",
   },
+  clearMocks:true,
 };
 
 module.exports = config;
